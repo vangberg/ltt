@@ -8,7 +8,7 @@ Given /login with login "(\w+)" and password "(\w+)"/ do |login, password|
 end
 
 Then /shows the dashboard/ do
-  assert_have_selector "h1:contains('Dashboard')"
+  assert_have_selector "h1:contains('time tracker')"
 end
 
 Then /current user is "(.*)"/ do |user|
@@ -16,5 +16,5 @@ Then /current user is "(.*)"/ do |user|
 end
 
 Then /doesn't show dashboard/ do
-  assert_have_no_selector "h1:contains('Dashboard')"
+  assert_have_no_selector "h1:contains('time tracker')"
 end

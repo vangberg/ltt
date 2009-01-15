@@ -39,11 +39,11 @@ Then /no projects are being tracked/ do
 end
 
 Then /doesn't show entry for "(.*)"/ do |project|
-  assert_have_no_selector "#entries .entry:first:contains('#{project}')"
+  assert_have_no_selector ".project:contains('#{project}') .entry"
 end
 
-Then /new entry with (\d+) minutes duration is added/ do |minutes|
-  assert_have_selector "#entries .entry:first:contains('10')"
+Then /(\d+) minute entry is added to "(.*)"/ do |minutes, project|
+  assert_have_selector ".project:contains('#{project}') .entry:first:contains('10')"
 end
 
 Then /can't track other projects/ do

@@ -68,7 +68,18 @@ end
 configure do
   DataMapper.setup(:default, "sqlite3::memory:")
   DataMapper.auto_migrate!
-  User.create(:login => "harry", :password => "foob")
+end
+
+=begin
+configure :development do
+  DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/development.db")
+  DataMapper.auto_migrate!
+end
+=end
+
+configure :production do
+  DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/production.db")
+  DataMapper.auto_migrate!
 end
 
 use Rack::Auth::Basic do |username, password|
@@ -128,13 +139,21 @@ __END__
 @@ layout
 !!!
 %html
+  %head
+    %title
+      the lil' time tracker
+    %link{:rel => 'stylesheet', :type => 'text/css', :href => '/timetracker.css'}
   %body
-    = yield
+    #content
+      = yield
+    #footer
+      icons from <a href='http://www.famfamfam.com/lab/icons/silk/'>famfamfam</a>
 
 @@ dashboard
-%h1 Dashboard
+%h1 the lil' time tracker
 
-#user=current_user.login
+#user==Welcome #{current_user.login}, are you ready to track?
+
 #projects
   - current_user.projects.each do |project|
     .project{:id => ('tracking' if tracking?(project))}
@@ -142,21 +161,50 @@ __END__
       - if !current_user.tracking || tracking?(project)
         - if tracking?(project)
           = post "/stop" do
-            %input{:type => 'image', :alt => 'Stop'}
+            %input{:type => 'image', :src => '/images/clock_stop.png', :alt => 'Stop'}
         - else
           = post "/track/#{project.short_url}" do
-            %input{:type => 'image', :alt => 'Track'}
+            %input{:type => 'image', :src => '/images/clock.png', :alt => 'Track'}
+      .entries
+        - project.entries.all(:order => [:id.desc]).each do |entry|
+          - unless entry == current_user.tracking
+            .entry
+              =entry.to_human
 
-#entries
-  - current_user.entries.all(:order => [:id.desc], :limit => 10).each do |entry|
-    - unless entry.duration == 0
-      .entry
-        =entry.to_human
-        =entry.project.name
-
+%h2 New project
 %form{:action => '/projects', :method => 'POST'}
   %label{:for => 'name'} Name
   %input{:type => 'text', :name => 'name', :id => 'name'}
   %input{:type => 'submit', :value => 'Create'}
 
 @@ stylesheet
+body
+  :font-family Helvetica, sans-serif
+#content
+  :width 600px
+  :margin auto
+h1
+  :font-style italic
+  :color #FF205F
+  :border-bottom 5px solid #FF205F
+#projects
+  form
+    :display inline
+  .project
+    a
+      :display inline-block
+      :width 520px
+      :margin 7px 10px 7px 0
+      :padding 5px 10px
+      :font-size 1.7em
+      :background-color #ff205f
+      :color white
+      :text-decoration none
+    a:hover
+      :color #ff205f
+      :background-color white
+#footer
+  :display none
+  :text-align center
+  :color #666
+  :font-size 0.6em

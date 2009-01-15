@@ -34,4 +34,4 @@ Feature: Tracking API
     When I visit the dashboard
     And stop tracking
     Then no projects are being tracked
-    And new entry with 10 minutes duration is added
+    And a 10 minute entry is added to "Loveless"
