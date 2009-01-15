@@ -77,7 +77,7 @@ end
 
 configure :production do
   DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/production.db")
-  DataMapper.auto_migrate!
+  DataMapper.auto_upgrade!
 end
 
 use Rack::Auth::Basic do |username, password|
