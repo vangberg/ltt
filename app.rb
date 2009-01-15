@@ -195,11 +195,11 @@ __END__
                   =entry.created_at.strftime("%d/%m:")
                   =entry.duration.to_human
 
-%h2 New project
-%form{:action => '/projects', :method => 'POST'}
-  %label{:for => 'name'} Name
-  %input{:type => 'text', :name => 'name', :id => 'name'}
-  %input{:type => 'submit', :value => 'Create'}
+#new_project
+  %form{:action => '/projects', :method => 'POST'}
+    %input{:type => 'text', :name => 'name', :id => 'name'}
+    %button
+      +
 
 @@ stylesheet
 body
@@ -248,6 +248,19 @@ h1
         :color white
         :background-color black
         :border-width 0
+#new_project
+  :margin 7px 0
+  input#name
+    :font-size 1.7em
+    :width 520px
+    :padding 5px 9px
+    :border 1px solid black
+  button
+    :cursor pointer
+    :font-size 1.7em
+    :color #ff205f
+    :background-color white
+    :border-width 0
 #footer
   :display none
   :text-align center
