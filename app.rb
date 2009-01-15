@@ -65,17 +65,15 @@ class Entry
   end
 end
 
-configure do
+configure :test do
   DataMapper.setup(:default, "sqlite3::memory:")
   DataMapper.auto_migrate!
 end
 
-=begin
 configure :development do
   DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/development.db")
   DataMapper.auto_migrate!
 end
-=end
 
 configure :production do
   DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/production.db")
@@ -143,6 +141,8 @@ __END__
     %title
       the lil' time tracker
     %link{:rel => 'stylesheet', :type => 'text/css', :href => '/timetracker.css'}
+    %script{:type => 'text/javascript', :src => '/jquery-1.3.min.js'}
+    %script{:type => 'text/javascript', :src => '/timetracker.js'}
   %body
     #content
       = yield
@@ -157,7 +157,7 @@ __END__
 #projects
   - current_user.projects.each do |project|
     .project{:id => ('tracking' if tracking?(project))}
-      %a{:href => "/#{project.short_url}"}=project.name
+      %a.name=project.name
       - if !current_user.tracking || tracking?(project)
         - if tracking?(project)
           = post "/stop" do
@@ -191,8 +191,9 @@ h1
   form
     :display inline
   .project
-    a
+    a.name
       :display inline-block
+      :position relative
       :width 520px
       :margin 7px 10px 7px 0
       :padding 5px 10px
@@ -200,9 +201,11 @@ h1
       :background-color #ff205f
       :color white
       :text-decoration none
-    a:hover
+    a.name:hover
       :color #ff205f
       :background-color white
+    .entries
+      :display none
 #footer
   :display none
   :text-align center
