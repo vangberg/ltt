@@ -103,8 +103,8 @@ helpers do
 
   def rest_link(path, method, &block)
     f = "<form action='#{path}' method='POST'>"
-    f << "<input type='hidden' name='_method' value='#{method.to_s.upcase}'"
     f << Haml::Helpers.capture_haml(&block)
+    f << "<input type='hidden' name='_method' value='#{method.to_s.upcase}' />"
     f << "</form>"
   end
 
@@ -198,7 +198,7 @@ __END__
 #new_project
   %form{:action => '/projects', :method => 'POST'}
     %input{:type => 'text', :name => 'name', :id => 'name'}
-    %button
+    %button{:alt => 'Create'}
       +
 
 @@ stylesheet
