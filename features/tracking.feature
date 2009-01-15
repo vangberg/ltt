@@ -9,21 +9,29 @@ Feature: Tracking API
     And start tracking "Kind of Blue"
     Then it shows the dashboard
     And "Kind of Blue" is being tracked
+    And doesn't show entry for "Kind of Blue"
 
-  Scenario: Start tracking twice
+  Scenario: When tracking, don't show Track buttons
     Given I am logged in
-    And a project named "Out to Lunch" exists
-    And a project named "Bitches Brew" exists
+    And a project named "Safe as Milk" exists
+    And a project named "Trout Mask Replica" exists
     When I visit the dashboard
-    And start tracking "Out to Lunch"
-    And start tracking "Bitches Brew"
-    Then it returns an error
+    And start tracking "Safe as Milk"
+    Then I can't track other projects
 
   Scenario: Stop tracking
     Given I am logged in
     And a project named "Unit Structures" exists
-    And I started tracking "Unit Structures" 10 minutes ago
     When I visit the dashboard
     And start tracking "Unit Structures"
     And stop tracking
     Then no projects are being tracked
+
+  Scenario: Stop tracking
+    Given I am logged in
+    And a project named "Loveless" exists
+    And I started tracking "Loveless" 10 minutes ago
+    When I visit the dashboard
+    And stop tracking
+    Then no projects are being tracked
+    And new entry with 10 minutes duration is added

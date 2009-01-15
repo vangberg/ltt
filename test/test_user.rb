@@ -11,6 +11,11 @@ class TestUser < Test::Unit::TestCase
     assert_equal @user.projects.last.name, 'Blue Train'
   end
 
+  test 'a user has many entries' do
+    @project.entries.create
+    assert @user.entries.length > 0, 'user has no entries'
+  end
+
   test 'a user can be tracking one entry' do
     @user.tracking = e = Entry.create
     @user.save

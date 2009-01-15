@@ -11,8 +11,13 @@ Given /project named "(.*)" exists/ do |name|
 end
 
 Given /started tracking "(.*)" (\d+) minutes ago/ do |project, minutes|
-  past = Time.now - 10 * 60
-  #mock(Time).now {past}
+  project = Project.first(:name => project)
+  @user.track!(project)
+
+  # We need to rewind time, mocking and stubbing yelled at me
+  entry = Entry.all.last
+  entry.created_at = (Time.now - minutes.to_i * 60)
+  entry.save
 end
 
 When /start tracking "(.*)"/ do |project|
@@ -33,6 +38,14 @@ Then /no projects are being tracked/ do
   assert_have_no_selector "#tracking"
 end
 
+Then /doesn't show entry for "(.*)"/ do |project|
+  assert_have_no_selector "#entries .entry:first:contains('#{project}')"
+end
+
 Then /new entry with (\d+) minutes duration is added/ do |minutes|
   assert_have_selector "#entries .entry:first:contains('10')"
+end
+
+Then /can't track other projects/ do
+  assert_have_no_selector "form[action*=track]"
 end

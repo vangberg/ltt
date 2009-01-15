@@ -10,6 +10,7 @@ class User
   property :password,     String
 
   has n, :projects
+  has n, :entries, :through => :projects
   has 1, :tracking, :class_name => 'Entry'
 
   def track!(project)
@@ -54,7 +55,14 @@ class Entry
   belongs_to :project
 
   # Otherwise obj will not be dirty and created_at not set. sucks
-  before(:create) { self.duration = 0 }
+  before(:create) { self.duration = 0 unless duration }
+
+  def to_human
+    h, m = *duration.divmod(3600)
+    hour_string   = h > 0 ? "#{h}h" : ""
+    minute_string = "#{m/60}m"
+    hour_string + minute_string
+  end
 end
 
 configure do
@@ -131,12 +139,20 @@ __END__
   - current_user.projects.each do |project|
     .project{:id => ('tracking' if tracking?(project))}
       %a{:href => "/#{project.short_url}"}=project.name
-      - if tracking?(project)
-        = post "/stop" do
-          %input{:type => 'image', :alt => 'Stop'}
-      - else
-        = post "/track/#{project.short_url}" do
-          %input{:type => 'image', :alt => 'Track'}
+      - if !current_user.tracking || tracking?(project)
+        - if tracking?(project)
+          = post "/stop" do
+            %input{:type => 'image', :alt => 'Stop'}
+        - else
+          = post "/track/#{project.short_url}" do
+            %input{:type => 'image', :alt => 'Track'}
+
+#entries
+  - current_user.entries.all(:order => [:id.desc], :limit => 10).each do |entry|
+    - unless entry.duration == 0
+      .entry
+        =entry.to_human
+        =entry.project.name
 
 %form{:action => '/projects', :method => 'POST'}
   %label{:for => 'name'} Name
