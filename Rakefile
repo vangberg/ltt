@@ -1,14 +1,15 @@
 require 'cucumber/rake/task'
  
-Cucumber::Rake::Task.new do |t|
-  t.cucumber_opts = "--format pretty --no-snippets"
+begin
+  Cucumber::Rake::Task.new do |t|
+    t.cucumber_opts = "--format pretty --no-snippets"
+  end
+rescue
 end
 
-task :user do
-  DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/production.db")
-  DataMapper.auto_migrate!
-
-  User.create(:login => login, :password => password)
+task :test do
+  require 'rake/runtest'
+  Rake.run_tests '**/test*.rb'
 end
 
 # the lil' deployment script // http://gist.github.com/43233

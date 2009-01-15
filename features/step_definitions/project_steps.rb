@@ -3,7 +3,7 @@ Then /project "(.*)" is listed/ do |project|
 end
 
 Then /has short link "([\-\w]+)"/ do |link|
-  assert_have_selector ".project a[href$=#{link}]"
+  assert_have_selector ".project form[action$=#{link}]"
 end
 
 Given /project named "(.*)" exists/ do |name|
@@ -42,8 +42,28 @@ Then /doesn't show entry for "(.*)"/ do |project|
   assert_have_no_selector ".project:contains('#{project}') .entry"
 end
 
-Then /(\d+) minute entry is added to "(.*)"/ do |minutes, project|
-  assert_have_selector ".project:contains('#{project}') .entry:first:contains('10')"
+Given /project "(.*)" has a (\d+) minute entry/ do |project, minutes|
+  project = Project.first(:name => project)
+  project.entries.create(:duration => minutes.to_i * 60)
+end
+
+Then /"(.*)" should have a (\d+) minute entry/ do |project, minutes|
+  assert_have_selector ".project:contains('#{project}') .entry:first:contains('#{minutes}')"
+end
+
+Then /"(.*)" shows a total of "(.*)"/ do |project, total|
+  assert_have_selector ".project:contains('#{project}') .total:contains('#{total}')"
+end
+
+When /delete latest entry in "(.*)"/ do |project|
+  within ".project:contains('#{project}') .entry:first" do
+    click_button
+  end
+end
+
+Then /"(.*)" should have (\d+) entries/ do |project, entries|
+  assert_have_no_selector ".project:contains('#{project}') .entry"
+  puts "FIX: css selector to assert number of entries"
 end
 
 Then /can't track other projects/ do

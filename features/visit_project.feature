@@ -6,4 +6,7 @@ Feature: Visit project
   Scenario: Visit project
     Given I am logged in
     And a project named "Out to Lunch" exists
-    When I visit the project "Out to Lunch"
+    And project "Out to Lunch" has a 10 minute entry
+    And project "Out to Lunch" has a 25 minute entry
+    When I visit the dashboard
+    Then "Out to Lunch" shows a total of "35m"

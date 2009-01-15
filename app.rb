@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'dm-core'
+require 'dm-aggregates'
 require 'dm-timestamps'
 
 class User
@@ -44,25 +45,28 @@ class Project
   end
 end
 
+class Integer
+  def to_human
+    h, m = *divmod(3600)
+    hour_string   = h > 0 ? "#{h}h" : ""
+    minute_string = "#{m/60}m"
+    hour_string + minute_string
+  end
+end
+
 class Entry
   include DataMapper::Resource
-  property :id,         Integer, :serial => true
-  property :duration,   Integer
-  property :project_id, Integer
-  property :user_id,    Integer
-  property :created_at, Time
+  property :id,           Integer, :serial => true
+  property :duration,     Integer
+  property :description,  String
+  property :project_id,   Integer
+  property :user_id,      Integer
+  property :created_at,   Time
 
   belongs_to :project
 
   # Otherwise obj will not be dirty and created_at not set. sucks
   before(:create) { self.duration = 0 unless duration }
-
-  def to_human
-    h, m = *duration.divmod(3600)
-    hour_string   = h > 0 ? "#{h}h" : ""
-    minute_string = "#{m/60}m"
-    hour_string + minute_string
-  end
 end
 
 configure :test do
@@ -90,9 +94,18 @@ helpers do
   end
 
   def post(path, &block)
-    s = "<form action='#{path}' method='POST'>"
-    s << Haml::Helpers.capture_haml(&block)
-    s << "</form>"
+    rest_link(path, :post, &block)
+  end
+
+  def delete(path, &block)
+    rest_link(path, :delete, &block)
+  end
+
+  def rest_link(path, method, &block)
+    f = "<form action='#{path}' method='POST'>"
+    f << "<input type='hidden' name='_method' value='#{method.to_s.upcase}'"
+    f << Haml::Helpers.capture_haml(&block)
+    f << "</form>"
   end
 
   def tracking?(project)
@@ -128,6 +141,12 @@ post '/stop' do
   redirect '/'
 end
 
+delete '/entries/:id' do
+  entry = current_user.entries.get(params[:id])
+  entry.destroy
+  redirect '/'
+end
+
 get('/timetracker.css') { sass :stylesheet }
 
 use_in_file_templates!
@@ -157,7 +176,9 @@ __END__
 #projects
   - current_user.projects.each do |project|
     .project{:id => ('tracking' if tracking?(project))}
-      %a.name=project.name
+      .bar
+        %a.name=project.name
+        %span.total=(project.entries.sum(:duration) || 0).to_human
       - if !current_user.tracking || tracking?(project)
         - if tracking?(project)
           = post "/stop" do
@@ -168,8 +189,11 @@ __END__
       .entries
         - project.entries.all(:order => [:id.desc]).each do |entry|
           - unless entry == current_user.tracking
-            .entry
-              =entry.to_human
+            %span.entry
+              = delete "/entries/#{entry.id}" do
+                %button
+                  =entry.created_at.strftime("%d/%m:")
+                  =entry.duration.to_human
 
 %h2 New project
 %form{:action => '/projects', :method => 'POST'}
@@ -191,21 +215,39 @@ h1
   form
     :display inline
   .project
-    a.name
+    .bar
       :display inline-block
       :position relative
       :width 520px
-      :margin 7px 10px 7px 0
+      :margin 7px 10px 0px 0
       :padding 5px 10px
       :font-size 1.7em
       :background-color #ff205f
+      :position relative
+      :cursor pointer
+    a.name
       :color white
       :text-decoration none
-    a.name:hover
-      :color #ff205f
-      :background-color white
+    .total
+      :color #999
+      :position absolute
+      :right 10px
     .entries
       :display none
+      :width 520px
+      :padding 10px
+      :background-color #ECCBDB
+      .entry button
+        :background-color white
+        :border-width 0
+        :cursor pointer
+        :font-size 0.7em
+        :margin 2px 0
+        :padding 5px
+      .entry button:hover
+        :color white
+        :background-color black
+        :border-width 0
 #footer
   :display none
   :text-align center

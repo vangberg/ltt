@@ -1,4 +1,4 @@
-Feature: Tracking API
+Feature: Tracking
   In order to bill my clients
   I want to be able to track my time
 
@@ -34,4 +34,4 @@ Feature: Tracking API
     When I visit the dashboard
     And stop tracking
     Then no projects are being tracked
-    And a 10 minute entry is added to "Loveless"
+    And "Loveless" should have a 10 minute entry

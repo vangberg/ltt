@@ -6,6 +6,7 @@ require File.dirname(__FILE__) + '/../../app.rb'
 
 Webrat.configure do |config|
   config.mode = :sinatra
+  config.open_error_files = true
 end 
 
 World do |world|
