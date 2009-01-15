@@ -1,0 +1,3 @@
+default: --no-snippets features/
+autotest: --no-snippets features/
+autotest-all: --no-snippets features/
