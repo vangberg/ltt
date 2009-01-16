@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'test_helper')
+require File.join(File.dirname(__FILE__), '..', 'helpers')
 
 class TestUser < Test::Unit::TestCase
   # stupid hack to avoid datamapper lameness

@@ -1,1 +1,0 @@
-default: RACK_ENV=test --no-snippets features/

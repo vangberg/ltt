@@ -103,7 +103,7 @@ helpers do
 
   def rest_link(path, method, &block)
     f = "<form action='#{path}' method='post'>"
-    f << "<input type='hidden' name='foo' value='bar' />"
+    f << "<input type='hidden' name='_method' value='#{method.to_s}' />"
     f << Haml::Helpers.capture_haml(&block)
     f << "</form>"
   end

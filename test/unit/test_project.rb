@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'test_helper')
+require File.join(File.dirname(__FILE__), '..', 'helpers')
 
 class TestProject < Test::Unit::TestCase
   before do
