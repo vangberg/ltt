@@ -102,9 +102,9 @@ helpers do
   end
 
   def rest_link(path, method, &block)
-    f = "<form action='#{path}' method='POST'>"
+    f = "<form action='#{path}' method='post'>"
+    f << "<input type='hidden' name='foo' value='bar' />"
     f << Haml::Helpers.capture_haml(&block)
-    f << "<input type='hidden' name='_method' value='#{method.to_s.upcase}' />"
     f << "</form>"
   end
 
@@ -189,16 +189,16 @@ __END__
       .entries
         - project.entries.all(:order => [:id.desc]).each do |entry|
           - unless entry == current_user.tracking
-            %span.entry
+            .entry
               = delete "/entries/#{entry.id}" do
                 %button
                   =entry.created_at.strftime("%d/%m:")
                   =entry.duration.to_human
 
 #new_project
-  %form{:action => '/projects', :method => 'POST'}
+  %form{:action => '/projects', :method => 'post'}
     %input{:type => 'text', :name => 'name', :id => 'name'}
-    %button{:alt => 'Create'}
+    %button{:title => 'Create'}
       +
 
 @@ stylesheet
@@ -237,17 +237,19 @@ h1
       :width 520px
       :padding 10px
       :background-color #ECCBDB
-      .entry button
-        :background-color white
-        :border-width 0
-        :cursor pointer
-        :font-size 0.7em
-        :margin 2px 0
-        :padding 5px
-      .entry button:hover
-        :color white
-        :background-color black
-        :border-width 0
+      .entry
+        :display inline
+        button
+          :background-color white
+          :border-width 0
+          :cursor pointer
+          :font-size 0.7em
+          :margin 2px 0
+          :padding 5px
+        button:hover
+          :color white
+          :background-color black
+          :border-width 0
 #new_project
   :margin 7px 0
   input#name

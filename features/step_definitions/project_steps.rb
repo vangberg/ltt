@@ -21,7 +21,9 @@ Given /started tracking "(.*)" (\d+) minutes ago/ do |project, minutes|
 end
 
 When /start tracking "(.*)"/ do |project|
-  within ".project:contains('#{project}')" do
+  within ".project:contains('#{project}')" do |s|
+    s.dom = "LOL"
+    p s.dom
     click_button 'Track'
   end
 end
@@ -56,8 +58,8 @@ Then /"(.*)" shows a total of "(.*)"/ do |project, total|
 end
 
 When /delete latest entry in "(.*)"/ do |project|
-  within ".project:contains('#{project}') .entry:first" do
-    click_button
+  within ".project:contains('#{project}') .entry:first form" do |f|
+    f.click_button
   end
 end
 

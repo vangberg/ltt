@@ -6,7 +6,7 @@ Feature: Create projects
   Scenario: Creating a new project
     Given I am logged in
     When I visit the dashboard
-    And fill in "Name" with "Night at Birdland"
+    And fill in "name" with "Night at Birdland"
     And click button "Create"
     Then project "Night at Birdland" is listed
     And has short link "night-at-birdland"
