@@ -18,8 +18,13 @@ class AuthenticationTest < Test::Unit::AcceptanceTestCase
   end
 
   scenario "invalid password" do
+    User.create(:login => 'Sun Ra', :password => 'Space')
+    basic_auth 'Sun Ra', 'Earth'
+    assert_have_no_selector "h1:contains('time tracker')"
   end
 
   scenario "non-existing user" do
+    basic_auth 'Parker', 'Birdland'
+    assert_have_no_selector "h1:contains('time tracker')"
   end
 end
