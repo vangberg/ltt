@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../helpers.rb'
+require File.dirname(__FILE__) + '/helpers.rb'
 
 class AuthenticationTest < Test::Unit::AcceptanceTestCase
   story <<-EOS
@@ -20,11 +20,17 @@ class AuthenticationTest < Test::Unit::AcceptanceTestCase
   scenario "invalid password" do
     User.create(:login => 'Sun Ra', :password => 'Space')
     basic_auth 'Sun Ra', 'Earth'
+    
+    visit '/'
+
     assert_have_no_selector "h1:contains('time tracker')"
   end
 
   scenario "non-existing user" do
     basic_auth 'Parker', 'Birdland'
+
+    visit '/'
+
     assert_have_no_selector "h1:contains('time tracker')"
   end
 end

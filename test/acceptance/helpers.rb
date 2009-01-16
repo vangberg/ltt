@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/../helpers.rb'
+
 Webrat.configure do |config|
   config.mode = :sinatra
 end

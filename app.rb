@@ -76,7 +76,7 @@ end
 
 configure :development do
   DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/development.db")
-  DataMapper.auto_migrate!
+  DataMapper.auto_upgrade!
 end
 
 configure :production do
@@ -198,7 +198,7 @@ __END__
 #new_project
   %form{:action => '/projects', :method => 'post'}
     %input{:type => 'text', :name => 'name', :id => 'name'}
-    %button{:title => 'Create'}
+    %button{:value => 'Create'}
       +
 
 @@ stylesheet

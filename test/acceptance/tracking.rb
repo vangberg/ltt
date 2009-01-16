@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../helpers.rb'
+require File.dirname(__FILE__) + '/helpers.rb'
 
 class AuthenticationTest < Test::Unit::AcceptanceTestCase
   story <<-EOS
