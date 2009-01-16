@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/helpers.rb'
+require File.join(File.dirname(__FILE__), '..', 'helpers.rb')
 
-class AuthenticationTest < Test::Unit::AcceptanceTestCase
+class TrackingTest < Test::Unit::AcceptanceTestCase
   story <<-EOS
     As a user
     I want to track my time

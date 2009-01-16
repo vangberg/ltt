@@ -6,6 +6,8 @@ require 'webrat/sinatra'
 require 'rr'
 require 'app'
 
+require File.dirname(__FILE__) / 'helpers' / 'acceptance'
+
 class Test::Unit::TestCase
   include RR::Adapters::TestUnit
 end

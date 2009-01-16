@@ -1,13 +1,11 @@
-require File.dirname(__FILE__) + '/../helpers.rb'
-
 Webrat.configure do |config|
   config.mode = :sinatra
 end
 
 class Test::Unit::AcceptanceTestCase < Test::Unit::TestCase
-  include Test::Storyteller
   include Webrat::Methods
   include Webrat::Matchers
+  include Test::Storyteller
   Webrat::Methods.delegate_to_session :response_code, :response_body
 
   before :each do

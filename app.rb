@@ -75,12 +75,12 @@ configure :test do
 end
 
 configure :development do
-  DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/development.db")
+  DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/db/development.db")
   DataMapper.auto_upgrade!
 end
 
 configure :production do
-  DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/production.db")
+  DataMapper.setup(:default, "sqlite3:///#{Dir.pwd}/db/production.db")
   DataMapper.auto_upgrade!
 end
 
@@ -163,8 +163,7 @@ __END__
     %script{:type => 'text/javascript', :src => '/jquery-1.3.min.js'}
     %script{:type => 'text/javascript', :src => '/timetracker.js'}
   %body
-    #content
-      = yield
+    = yield
     #footer
       icons from <a href='http://www.famfamfam.com/lab/icons/silk/'>famfamfam</a>
 

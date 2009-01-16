@@ -1,15 +1,23 @@
-require 'cucumber/rake/task'
  
-begin
-  Cucumber::Rake::Task.new do |t|
-    t.cucumber_opts = "--format pretty --no-snippets"
-  end
-rescue
+desc "run all tests"
+task :test => ['test:unit', 'test:acceptance'] do
+  nil
 end
 
-task :test do
-  require 'rake/runtest'
-  Rake.run_tests '**/test*.rb'
+namespace :test do
+  task :runtest do
+    require 'rake/runtest'
+  end
+
+  desc "run unit tests"
+  task :unit => :runtest do
+    Rake.run_tests 'test/unit/*.rb', true
+  end
+
+  desc "run acceptance tests"
+  task :acceptance => :runtest do
+    Rake.run_tests 'test/acceptance/*.rb', true
+  end
 end
 
 # the lil' deployment script // http://gist.github.com/43233

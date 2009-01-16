@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/helpers.rb'
+require File.join(File.dirname(__FILE__), '..', 'helpers.rb')
 
 class EntriesTest < Test::Unit::AcceptanceTestCase
   story <<-EOS
