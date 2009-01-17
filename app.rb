@@ -190,18 +190,19 @@ __END__
         - else
           = post "/track/#{project.short_url}" do
             %input{:type => 'image', :src => '/images/clock.png', :alt => 'Track'}
-      = put "/projects/#{project.short_url}" do
-        %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}
-        %button Change alias
-        
-      .entries
-        - project.entries.all(:order => [:id.desc]).each do |entry|
-          - unless entry == current_user.tracking
-            .entry
-              = delete "/entries/#{entry.id}" do
-                %button
-                  =entry.created_at.strftime("%d/%m:")
-                  =entry.duration.to_human
+      .project-body
+        = put "/projects/#{project.short_url}" do
+          %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}
+          %button Change alias
+          
+        .entries
+          - project.entries.all(:order => [:id.desc]).each do |entry|
+            - unless entry == current_user.tracking
+              .entry
+                = delete "/entries/#{entry.id}" do
+                  %button
+                    =entry.created_at.strftime("%d/%m:")
+                    =entry.duration.to_human
 
 #new_project
   %form{:action => '/projects', :method => 'post'}
@@ -240,24 +241,25 @@ h1
       :color #999
       :position absolute
       :right 10px
-    .entries
+    .project-body
       :display none
       :width 520px
       :padding 10px
       :background-color #ECCBDB
-      .entry
-        :display inline
-        button
-          :background-color white
-          :border-width 0
-          :cursor pointer
-          :font-size 0.7em
-          :margin 2px 0
-          :padding 5px
-        button:hover
-          :color white
-          :background-color black
-          :border-width 0
+      .entries
+        .entry
+          :display inline
+          button
+            :background-color white
+            :border-width 0
+            :cursor pointer
+            :font-size 0.7em
+            :margin 2px 0
+            :padding 5px
+          button:hover
+            :color white
+            :background-color black
+            :border-width 0
 #new_project
   :margin 7px 0
   input#name

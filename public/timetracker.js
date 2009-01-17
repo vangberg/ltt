@@ -1,6 +1,6 @@
 $(function() {
   $(".project .bar").click(function() {
-    $(this).parent().find(".entries").slideToggle(500);
+    $(this).parent().find(".project-body").slideToggle(500);
   })
 
   $(".entry button").click(function() {
