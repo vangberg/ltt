@@ -3,6 +3,7 @@ require 'sinatra'
 require 'dm-core'
 require 'dm-aggregates'
 require 'dm-timestamps'
+require 'dm-validations'
 
 class User
   include DataMapper::Resource
@@ -37,6 +38,8 @@ class Project
 
   belongs_to :user
   has n, :entries
+
+  validates_present :name
 
   before :save, :make_short_url
   private
