@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), '..', 'helpers.rb')
 
-class EntriesTest < Test::Unit::AcceptanceTestCase
+class DeleteEntryTest < Test::Unit::AcceptanceTestCase
   story <<-EOS
     As a user
     I want to be able to delete entries

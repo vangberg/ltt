@@ -3,6 +3,7 @@ require 'test/unit'
 require 'context'
 require 'storyteller'
 require 'webrat/sinatra'
+#require '/Users/h/code/webrat/lib/webrat/sinatra'
 require 'rr'
 require 'app'
 

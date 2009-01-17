@@ -93,13 +93,9 @@ helpers do
     @current_user ||= User.first(:login => request.env['REMOTE_USER'])
   end
 
-  def post(path, &block)
-    rest_link(path, :post, &block)
-  end
-
-  def delete(path, &block)
-    rest_link(path, :delete, &block)
-  end
+  def post(path, &block) rest_link(path, :post, &block) end
+  def put(path, &block) rest_link(path, :put, &block) end
+  def delete(path, &block) rest_link(path, :delete, &block) end
 
   def rest_link(path, method, &block)
     f = "<form action='#{path}' method='post'>"
@@ -124,6 +120,12 @@ end
 post '/projects' do
   current_user.projects.build(params)
   redirect('/') if current_user.save
+end
+
+put '/projects/:short_url' do
+  project = current_user.projects.first(:short_url => params[:short_url])
+  project.update_attributes(params['project'])
+  redirect '/'
 end
 
 post '/track/:project' do
@@ -185,6 +187,10 @@ __END__
         - else
           = post "/track/#{project.short_url}" do
             %input{:type => 'image', :src => '/images/clock.png', :alt => 'Track'}
+      = put "/projects/#{project.short_url}" do
+        %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}
+        %button Change alias
+        
       .entries
         - project.entries.all(:order => [:id.desc]).each do |entry|
           - unless entry == current_user.tracking
