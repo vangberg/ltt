@@ -19,8 +19,18 @@ oh yes, even easier.
     $ vim /path/to/my/workz
     $ ltt stop
 
-that's it! (that is, when somebody actually write that 4-line wrapper around
-curl)
+that's it! here's a fish function that does the job (if you care about bash,
+write it yrself):
+
+    function ltt
+      switch $argv[1]
+        case track
+          curl -X POST $LILURL/track/$argv[2] -w "%{http_code}"
+          echo
+        case stop
+          curl -X POST $LILURL/stop -s
+      end
+    end
 
 ## setup
 run it from the cli or configure passenger or however you roll, like this:
