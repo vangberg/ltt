@@ -1,4 +1,3 @@
- 
 desc "run all tests"
 task :test => ['test:unit', 'test:acceptance'] do
   nil
