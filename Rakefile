@@ -41,5 +41,6 @@ namespace :deploy do
   task :setup do
     ssh "cd #{APP_PATH.sub(/[^\/]*$/,'')} && git clone #{APP_REPO}"
     ssh "cd #{APP_PATH} && test ! -d tmp && mkdir tmp"
+    ssh "cd #{APP_PATH} && test ! -d tmp && mkdir log"
   end
 end
