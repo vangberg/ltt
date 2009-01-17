@@ -1,2 +1,3 @@
 - error checking, if any?
-- cli
+- cli: `ltt track fooproj` and `ltt stop`. plz do. i got mad at restclient and
+        net/http

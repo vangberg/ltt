@@ -131,7 +131,7 @@ get '/dashboard' do
 end
 
 post '/projects' do
-  current_user.projects.build(params)
+  current_user.projects.create(params)
   redirect('/')
 end
 
