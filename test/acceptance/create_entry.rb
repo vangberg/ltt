@@ -17,6 +17,6 @@ class CreateEntryTest < Test::Unit::AcceptanceTestCase
       click_button 'Create entry'
     end
 
-    assert_have_selector ".project:contains('Psychocandy') .entry:first:contains('10m')"
+    assert_have_selector ".project:contains('Psychocandy') .entry:first:contains('2h10m')"
   end
 end

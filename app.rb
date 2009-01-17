@@ -70,6 +70,12 @@ class Entry
 
   # Otherwise obj will not be dirty and created_at not set. sucks
   before(:create) { self.duration = 0 unless duration }
+
+  def duration_as_string=(string)
+    match = string.delete(' ').match(/((\d+)h)?((\d+)m)?/)
+    h, m = match[2], match[4]
+    self.duration = h.to_i * 3600 + m.to_i * 60
+  end
 end
 
 configure :test do
@@ -128,6 +134,12 @@ end
 put '/projects/:short_url' do
   project = current_user.projects.first(:short_url => params[:short_url])
   project.update_attributes(params['project'])
+  redirect '/'
+end
+
+post '/projects/:project/entries' do
+  project = current_user.projects.first(:short_url => params[:short_url])
+  project.entries.create(:duration_as_string => params[:duration])
   redirect '/'
 end
 
@@ -191,9 +203,14 @@ __END__
           = post "/track/#{project.short_url}" do
             %input{:type => 'image', :src => '/images/clock.png', :alt => 'Track'}
       .project-body
+
         = put "/projects/#{project.short_url}" do
           %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}
-          %button Change alias
+          %button Save it!
+
+        = post "/projects/#{project.short_url}/entries" do
+          %input{:type => 'text', :name => 'duration'}
+          %button Hit it!
           
         .entries
           - project.entries.all(:order => [:id.desc]).each do |entry|

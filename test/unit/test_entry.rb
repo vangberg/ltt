@@ -12,6 +12,28 @@ class TestUser < Test::Unit::TestCase
     assert_equal 60, entry.duration
   end
 
+  context "translate duration to seconds from" do
+    test "minutes" do
+      entry = Entry.create(:duration_as_string => '10m')
+      assert_equal 10 * 60, entry.duration
+    end
+
+    test "hours" do
+      entry = Entry.create(:duration_as_string => '2h')
+      assert_equal 2 * 3600, entry.duration
+    end
+
+    test "hours and minutes" do
+      entry = Entry.create(:duration_as_string => '2h10m')
+      assert_equal (2 * 3600) + (10 * 60), entry.duration
+    end
+
+    test "hours and minutes with spaces" do
+      entry = Entry.create(:duration_as_string => '2h 10m')
+      assert_equal (2 * 3600) + (10 * 60), entry.duration
+    end
+  end
+
   context 'duration is written' do
     test 'as minutes' do
       entry = Entry.create(:duration => 10 * 60)
