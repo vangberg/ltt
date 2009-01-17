@@ -160,11 +160,11 @@ post '/track/:project' do
       redirect '/'
     else
       status 404
-      "No project by that alias exists!"
+      "No project by that alias exists!\n"
     end
   rescue
     status 403
-    "Already tracking, you can't double work, can you?"
+    "Already tracking, you can't double work, can you?\n"
   end
 end
 
