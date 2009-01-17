@@ -154,11 +154,17 @@ post '/projects/:project/entries' do
 end
 
 post '/track/:project' do
-  if project = find_project(params[:project])
-    current_user.track!(project)
-    redirect '/'
-  else
-    status 404
+  begin
+    if project = find_project(params[:project])
+      current_user.track!(project)
+      redirect '/'
+    else
+      status 404
+      "No project by that alias exists!"
+    end
+  rescue
+    status 403
+    "Already tracking, you can't double work, can you?"
   end
 end
 
