@@ -1,6 +1,6 @@
 # the lil' (cute) time tracker
 
-!(http://img.skitch.com/20090117-qf7dq73tgrj3kk65kf86kx4mnb.jpg)
+![lolz](http://img.skitch.com/20090117-qf7dq73tgrj3kk65kf86kx4mnb.jpg)
 
 this is a replacement for my old system, with a workflow based on shuffling
 post-it's and calculating total hours and all kind of boring shit. this is
