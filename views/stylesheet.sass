@@ -1,0 +1,80 @@
+body
+  :font-family Helvetica, sans-serif
+#content
+  :width 600px
+  :margin auto
+h1
+  :font-style italic
+  :color #FF205F
+  :border-bottom 5px solid #FF205F
+#projects
+  form
+    :display inline
+  .project
+    .bar
+      :display inline-block
+      :position relative
+      :width 520px
+      :margin 7px 10px 0px 0
+      :padding 5px 10px
+      :font-size 1.7em
+      :background-color #ff205f
+      :position relative
+      :cursor pointer
+    a.name
+      :color white
+      :text-decoration none
+    .total
+      :color #999
+      :position absolute
+      :right 10px
+    .project-body
+      :position relative
+      :display none
+      .sidebar
+        :top 5px
+        :right 5px
+      .controls, .entries
+        :display inline-block
+        :width 520px
+        :background-color #ECCBDB
+        :margin-right 10px
+        :padding 10px
+      .controls
+        :padding-bottom 0px
+        input, button
+          :background-color white
+          :border 1px solid #999
+          :padding 3px 5px
+      .entries
+        .entry
+          :display inline
+          button
+            :background-color white
+            :border-width 0
+            :cursor pointer
+            :font-size 0.7em
+            :margin 2px 0
+            :padding 5px
+          button:hover
+            :color white
+            :background-color black
+            :border-width 0
+#new_project
+  :margin 7px 0
+  input#name
+    :font-size 1.7em
+    :width 520px
+    :padding 5px 9px
+    :border 1px solid black
+  button
+    :cursor pointer
+    :font-size 1.7em
+    :color #ff205f
+    :background-color white
+    :border-width 0
+#footer
+  :display none
+  :text-align center
+  :color #666
+  :font-size 0.6em

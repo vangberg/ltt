@@ -116,6 +116,10 @@ helpers do
   def tracking?(project)
     current_user.tracking && current_user.tracking.project == project
   end
+
+  def find_project(short_url)
+    project = current_user.projects.first(:short_url => short_url)
+  end
 end
 
 get '/' do
@@ -128,35 +132,31 @@ end
 
 post '/projects' do
   current_user.projects.build(params)
-  redirect('/') if current_user.save
+  redirect('/')
 end
 
 put '/projects/:short_url' do
-  project = current_user.projects.first(:short_url => params[:short_url])
+  find_project(params[:short_url])
   project.update_attributes(params['project'])
   redirect '/'
 end
 
 delete '/projects/:project' do
-  project = current_user.projects.first(:short_url => params[:project])
+  find_project(params[:project])
   project.destroy
   redirect '/'
 end
 
 post '/projects/:project/entries' do
-  project = current_user.projects.first(:short_url => params[:project])
+  find_project(params[:project])
   project.entries.create(:duration_as_string => params[:duration])
   redirect '/'
 end
 
 post '/track/:project' do
-  begin
-    project = current_user.projects.first(:short_url => params[:project])
-    current_user.track!(project)
-    redirect '/'
-  rescue
-    status 403
-  end
+  find_project(params[:project])
+  current_user.track!(project)
+  redirect '/'
 end
 
 post '/stop' do
@@ -197,7 +197,7 @@ __END__
 @@ dashboard
 %h1 the lil' time tracker
 
-#user==Welcome #{current_user.login}, are you ready to track?
+#user==Hello #{current_user.login}, are you ready to track?
 
 #projects
   - current_user.projects.each do |project|
@@ -237,85 +237,3 @@ __END__
     %input{:type => 'text', :name => 'name', :id => 'name'}
     %button{:value => 'Create'}
       +
-
-@@ stylesheet
-body
-  :font-family Helvetica, sans-serif
-#content
-  :width 600px
-  :margin auto
-h1
-  :font-style italic
-  :color #FF205F
-  :border-bottom 5px solid #FF205F
-#projects
-  form
-    :display inline
-  .project
-    .bar
-      :display inline-block
-      :position relative
-      :width 520px
-      :margin 7px 10px 0px 0
-      :padding 5px 10px
-      :font-size 1.7em
-      :background-color #ff205f
-      :position relative
-      :cursor pointer
-    a.name
-      :color white
-      :text-decoration none
-    .total
-      :color #999
-      :position absolute
-      :right 10px
-    .project-body
-      :position relative
-      :display none
-      .sidebar
-        :top 5px
-        :right 5px
-      .controls, .entries
-        :display inline-block
-        :width 520px
-        :background-color #ECCBDB
-        :margin-right 10px
-        :padding 10px
-      .controls
-        :padding-bottom 0px
-        input, button
-          :background-color white
-          :border 1px solid #999
-          :padding 3px 5px
-      .entries
-        .entry
-          :display inline
-          button
-            :background-color white
-            :border-width 0
-            :cursor pointer
-            :font-size 0.7em
-            :margin 2px 0
-            :padding 5px
-          button:hover
-            :color white
-            :background-color black
-            :border-width 0
-#new_project
-  :margin 7px 0
-  input#name
-    :font-size 1.7em
-    :width 520px
-    :padding 5px 9px
-    :border 1px solid black
-  button
-    :cursor pointer
-    :font-size 1.7em
-    :color #ff205f
-    :background-color white
-    :border-width 0
-#footer
-  :display none
-  :text-align center
-  :color #666
-  :font-size 0.6em
