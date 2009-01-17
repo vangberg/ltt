@@ -137,6 +137,12 @@ put '/projects/:short_url' do
   redirect '/'
 end
 
+delete '/projects/:project' do
+  project = current_user.projects.first(:short_url => params[:project])
+  project.destroy
+  redirect '/'
+end
+
 post '/projects/:project/entries' do
   project = current_user.projects.first(:short_url => params[:project])
   project.entries.create(:duration_as_string => params[:duration])
@@ -164,7 +170,10 @@ delete '/entries/:id' do
   redirect '/'
 end
 
-get('/timetracker.css') { sass :stylesheet }
+get '/timetracker.css' do
+  content_type 'text/css', :charset => 'utf-8'
+  sass :stylesheet
+end
 
 use_in_file_templates!
 
@@ -180,7 +189,8 @@ __END__
     %script{:type => 'text/javascript', :src => '/jquery-1.3.min.js'}
     %script{:type => 'text/javascript', :src => '/timetracker.js'}
   %body
-    = yield
+    #content
+      = yield
     #footer
       icons from <a href='http://www.famfamfam.com/lab/icons/silk/'>famfamfam</a>
 
@@ -203,16 +213,16 @@ __END__
           = post "/track/#{project.short_url}" do
             %input{:type => 'image', :src => '/images/clock.png', :alt => 'Track'}
       .project-body
-
         .controls
           = put "/projects/#{project.short_url}" do
             %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}
             %button Change alias!
-
           = post "/projects/#{project.short_url}/entries" do
             %input{:type => 'text', :name => 'duration'}
             %button Add time!
-          
+        %span.delete
+          = delete "/projects/#{project.short_url}" do
+            %input{:type => 'image', :src => '/images/delete.png', :alt => 'Delete'}
         .entries
           - project.entries.all(:order => [:id.desc]).each do |entry|
             - unless entry == current_user.tracking
@@ -260,12 +270,19 @@ h1
       :position absolute
       :right 10px
     .project-body
+      :position relative
       :display none
-      :width 520px
-      :padding 10px
-      :background-color #ECCBDB
+      .sidebar
+        :top 5px
+        :right 5px
+      .controls, .entries
+        :display inline-block
+        :width 520px
+        :background-color #ECCBDB
+        :margin-right 10px
+        :padding 10px
       .controls
-        :padding-bottom 0.5em
+        :padding-bottom 0px
         input, button
           :background-color white
           :border 1px solid #999

@@ -9,4 +9,11 @@ $(function() {
     else
       return false;
   })
+
+  $(".delete input").click(function() {
+    if (confirm("Do you want to delete this project?"))
+      return true;
+    else
+      return false;
+  })
 })
