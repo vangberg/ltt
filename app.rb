@@ -192,7 +192,7 @@ __END__
     #content
       = yield
     #footer
-      icons from <a href='http://www.famfamfam.com/lab/icons/silk/'>famfamfam</a>
+      &copy; 2008 <a href='http://imperialglamour.com'>Imperial Glamour</a> // Source at <a href='http://github.com/ichverstehe/ltt'>GitHub</a> // Icons by <a href='http://www.famfamfam.com/lab/icons/silk/'>famfamfam</a>
 
 @@ dashboard
 %h1 the lil' time tracker
