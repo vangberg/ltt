@@ -154,8 +154,11 @@ post '/projects/:project/entries' do
 end
 
 post '/track/:project' do
-  project = find_project(params[:project])
-  current_user.track!(project)
+  if project = find_project(params[:project])
+    current_user.track!(project)
+  else
+    status 404
+  end
   redirect '/'
 end
 
