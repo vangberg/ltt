@@ -14,7 +14,7 @@ class CreateEntryTest < Test::Unit::AcceptanceTestCase
     visit '/'
     within ".project:contains('Psychocandy')" do
       fill_in 'duration', :with => '2h 10m'
-      click_button 'Create entry'
+      click_button 'Add time!'
     end
 
     assert_have_selector ".project:contains('Psychocandy') .entry:first:contains('2h10m')"

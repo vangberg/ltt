@@ -14,8 +14,8 @@ class EditProjectTest < Test::Unit::AcceptanceTestCase
 
     visit '/'
     within ".project:contains('My Aim Is True')" do
-      fill_in 'short_url', :with => 'aim'
-      click_button 'Change alias'
+      fill_in 'project[short_url]', :with => 'aim'
+      click_button 'Change alias!'
     end
 
     assert_have_selector ".project:contains('My Aim Is True') input[value='aim']"

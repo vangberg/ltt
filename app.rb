@@ -138,7 +138,7 @@ put '/projects/:short_url' do
 end
 
 post '/projects/:project/entries' do
-  project = current_user.projects.first(:short_url => params[:short_url])
+  project = current_user.projects.first(:short_url => params[:project])
   project.entries.create(:duration_as_string => params[:duration])
   redirect '/'
 end
@@ -204,13 +204,14 @@ __END__
             %input{:type => 'image', :src => '/images/clock.png', :alt => 'Track'}
       .project-body
 
-        = put "/projects/#{project.short_url}" do
-          %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}
-          %button Save it!
+        .controls
+          = put "/projects/#{project.short_url}" do
+            %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}
+            %button Change alias!
 
-        = post "/projects/#{project.short_url}/entries" do
-          %input{:type => 'text', :name => 'duration'}
-          %button Hit it!
+          = post "/projects/#{project.short_url}/entries" do
+            %input{:type => 'text', :name => 'duration'}
+            %button Add time!
           
         .entries
           - project.entries.all(:order => [:id.desc]).each do |entry|
@@ -263,6 +264,12 @@ h1
       :width 520px
       :padding 10px
       :background-color #ECCBDB
+      .controls
+        :padding-bottom 0.5em
+        input, button
+          :background-color white
+          :border 1px solid #999
+          :padding 3px 5px
       .entries
         .entry
           :display inline
