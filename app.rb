@@ -118,7 +118,7 @@ helpers do
   end
 
   def find_project(short_url)
-    project = current_user.projects.first(:short_url => short_url)
+    current_user.projects.first(:short_url => short_url)
   end
 end
 
@@ -136,25 +136,25 @@ post '/projects' do
 end
 
 put '/projects/:short_url' do
-  find_project(params[:short_url])
+  project = find_project(params[:short_url])
   project.update_attributes(params['project'])
   redirect '/'
 end
 
 delete '/projects/:project' do
-  find_project(params[:project])
+  project = find_project(params[:project])
   project.destroy
   redirect '/'
 end
 
 post '/projects/:project/entries' do
-  find_project(params[:project])
+  project = find_project(params[:project])
   project.entries.create(:duration_as_string => params[:duration])
   redirect '/'
 end
 
 post '/track/:project' do
-  find_project(params[:project])
+  project = find_project(params[:project])
   current_user.track!(project)
   redirect '/'
 end
