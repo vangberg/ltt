@@ -17,7 +17,7 @@ class CreateEntryTest < Test::Unit::AcceptanceTestCase
       click_button 'Add time!'
     end
 
-    assert_have_selector ".project:contains('Psychocandy') .project-body.visible"
+    assert_have_selector ".project:contains('Psychocandy') .project-body[style='display: block']"
     assert_have_selector ".project:contains('Psychocandy') .entry:first:contains('2h10m')"
   end
 end

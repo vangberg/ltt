@@ -227,7 +227,7 @@ __END__
         - else
           = post "/track/#{project.short_url}" do
             %input{:type => 'image', :src => '/images/clock.png', :alt => 'Track'}
-      .project-body{:class => ('visible' if project == @project)}
+      .project-body{:style => "display: #{project == @project ? 'block' : 'none'}"}
         .controls
           = put "/projects/#{project.short_url}" do
             %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}

@@ -14,7 +14,7 @@ class CreateProjectTest < Test::Unit::AcceptanceTestCase
     fill_in 'name', :with => 'Night at Birdland'
     click_button 'Create'
 
-    assert_have_selector ".project:contains('Night at Birdland') .project-body.visible"
+    assert_have_selector ".project:contains('Night at Birdland') .project-body[style='display: block']"
 
     assert_have_selector ".project:first *:contains('Night at Birdland')"
     assert_have_selector ".project form[action$=night-at-birdland]"
