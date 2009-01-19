@@ -152,12 +152,6 @@ delete '/:project' do
   redirect '/'
 end
 
-post '/:project/entries' do
-  @project = find_project(params[:project])
-  @project.entries.create(:duration_as_string => params[:duration])
-  haml :dashboard
-end
-
 post '/track/:project' do
   begin
     if project = find_project(params[:project])
@@ -178,11 +172,16 @@ post '/stop' do
   redirect '/'
 end
 
+post '/:project/entries' do
+  project = find_project(params[:project])
+  project.entries.create(:duration_as_string => params[:duration])
+  redirect "/#{project.short_url}"
+end
+
 delete '/entries/:id' do
   entry = current_user.entries.get(params[:id])
   entry.destroy
-  @project = entry.project
-  haml :dashboard
+  redirect "/#{entry.project.short_url}"
 end
 
 get '/timetracker.css' do
