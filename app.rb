@@ -130,29 +130,29 @@ get '/dashboard' do
   haml :dashboard
 end
 
-post '/projects' do
+post '/' do
   project = current_user.projects.create(params)
-  redirect "/projects/#{project.short_url}"
+  redirect "/#{project.short_url}"
 end
 
-get '/projects/:project' do
+get '/:project' do
   @project = find_project(params[:project])
   haml :dashboard
 end
 
-put '/projects/:short_url' do
+put '/:short_url' do
   @project = find_project(params[:short_url])
   @project.update_attributes(params['project'])
   haml :dashboard
 end
 
-delete '/projects/:project' do
+delete '/:project' do
   project = find_project(params[:project])
   project.destroy
   redirect '/'
 end
 
-post '/projects/:project/entries' do
+post '/:project/entries' do
   @project = find_project(params[:project])
   @project.entries.create(:duration_as_string => params[:duration])
   haml :dashboard
@@ -229,14 +229,14 @@ __END__
             %input{:type => 'image', :src => '/images/clock.png', :alt => 'Track'}
       .project-body{:style => "display: #{project == @project ? 'block' : 'none'}"}
         .controls
-          = put "/projects/#{project.short_url}" do
+          = put "/#{project.short_url}" do
             %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}
             %button Change alias!
-          = post "/projects/#{project.short_url}/entries" do
+          = post "/#{project.short_url}/entries" do
             %input{:type => 'text', :name => 'duration'}
             %button Add time!
         %span.delete
-          = delete "/projects/#{project.short_url}" do
+          = delete "/#{project.short_url}" do
             %input{:type => 'image', :src => '/images/delete.png', :alt => 'Delete'}
         .entries
           - project.entries.all(:order => [:id.desc]).each do |entry|
@@ -248,7 +248,7 @@ __END__
                     =entry.duration.to_human
 
 #new_project
-  %form{:action => '/projects', :method => 'post'}
+  %form{:action => '/', :method => 'post'}
     %input{:type => 'text', :name => 'name', :id => 'name'}
     %button{:value => 'Create'}
       +
