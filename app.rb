@@ -21,9 +21,10 @@ class User
     save
   end
 
-  def stop!
+  def stop!(description='')
     raise "User is not tracking any project. Can't stop!" unless tracking
     tracking.duration = (Time.now - tracking.created_at).to_i
+    tracking.description = description
     self.tracking = nil
     save
   end
@@ -168,7 +169,7 @@ post '/track/:project' do
 end
 
 post '/stop' do
-  current_user.stop! if current_user.tracking
+  current_user.stop!(params[:description]) if current_user.tracking
   redirect '/'
 end
 
@@ -222,6 +223,7 @@ __END__
       - if !current_user.tracking || tracking?(project)
         - if tracking?(project)
           = post "/stop" do
+            %input{:type => 'hidden', :name => 'description'}
             %input{:type => 'image', :src => '/images/clock_stop.png', :alt => 'Stop'}
         - else
           = post "/track/#{project.short_url}" do
@@ -243,8 +245,9 @@ __END__
               .entry
                 = delete "/entries/#{entry.id}" do
                   %button
-                    =entry.created_at.strftime("%d/%m:")
+                    %span.desc=entry.created_at.strftime("%d/%m:")
                     =entry.duration.to_human
+                    %span.desc=entry.description
 
 #new_project
   %form{:action => '/', :method => 'post'}

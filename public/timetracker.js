@@ -16,4 +16,9 @@ $(function() {
     else
       return false;
   })
+
+  $("form[action='/stop']").submit(function() {
+    var description = prompt('Description:');
+    $(this).find('[name=description]').val(description);
+  })
 })

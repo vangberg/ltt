@@ -57,4 +57,22 @@ class TrackingTest < Test::Unit::AcceptanceTestCase
     assert_have_no_selector '#tracking'
     assert_have_selector ".project:contains('Loveless') .entry:first:contains('10')"
   end
+
+  scenario "when I stop tracking an entry w/ description has been added to the project" do
+    login!
+    project = @user.projects.create(:name => 'Loveless')
+
+    @user.track!(project)
+    Entry.all.last.update_attributes(:created_at => Time.now - 10 * 60)
+
+    visit '/'
+    within ".project:contains('Loveless')" do
+      set_hidden_field 'description', :to => 'Very awesome record!'
+    end
+    click_button 'Stop'
+
+    assert_have_no_selector '#tracking'
+    assert_have_selector ".project:contains('Loveless') .entry:first:contains('10')"
+    assert_have_selector ".project:contains('Loveless') .entry:first:contains('Very awesome record!')"
+  end
 end

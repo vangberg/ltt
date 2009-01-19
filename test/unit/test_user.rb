@@ -42,6 +42,12 @@ class TestUser < Test::Unit::TestCase
     assert_equal nil, @user.reload.tracking
   end
 
+  test 'a user can stop tracking w/ description' do
+    @user.track!(@project)
+    @user.stop!('deploying stuff')
+    assert_equal 'deploying stuff', @project.entries.all.last.description
+  end
+
   test 'stopping while not tracking fails' do
     assert_raise RuntimeError do
       @user.stop!
