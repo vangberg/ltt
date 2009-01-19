@@ -131,14 +131,19 @@ get '/dashboard' do
 end
 
 post '/projects' do
-  current_user.projects.create(params)
-  redirect('/')
+  project = current_user.projects.create(params)
+  redirect "/projects/#{project.short_url}"
+end
+
+get '/projects/:project' do
+  @project = find_project(params[:project])
+  haml :dashboard
 end
 
 put '/projects/:short_url' do
-  project = find_project(params[:short_url])
-  project.update_attributes(params['project'])
-  redirect '/'
+  @project = find_project(params[:short_url])
+  @project.update_attributes(params['project'])
+  haml :dashboard
 end
 
 delete '/projects/:project' do
@@ -148,9 +153,9 @@ delete '/projects/:project' do
 end
 
 post '/projects/:project/entries' do
-  project = find_project(params[:project])
-  project.entries.create(:duration_as_string => params[:duration])
-  redirect '/'
+  @project = find_project(params[:project])
+  @project.entries.create(:duration_as_string => params[:duration])
+  haml :dashboard
 end
 
 post '/track/:project' do
@@ -176,7 +181,8 @@ end
 delete '/entries/:id' do
   entry = current_user.entries.get(params[:id])
   entry.destroy
-  redirect '/'
+  @project = entry.project
+  haml :dashboard
 end
 
 get '/timetracker.css' do
@@ -221,7 +227,7 @@ __END__
         - else
           = post "/track/#{project.short_url}" do
             %input{:type => 'image', :src => '/images/clock.png', :alt => 'Track'}
-      .project-body
+      .project-body{:class => ('visible' if project == @project)}
         .controls
           = put "/projects/#{project.short_url}" do
             %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}

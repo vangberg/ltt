@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), '..', 'helpers.rb')
 
-class ProjectTest < Test::Unit::AcceptanceTestCase
+class CreateProjectTest < Test::Unit::AcceptanceTestCase
   story <<-EOS
     As a user
     I want to be able to create projects
@@ -14,10 +14,9 @@ class ProjectTest < Test::Unit::AcceptanceTestCase
     fill_in 'name', :with => 'Night at Birdland'
     click_button 'Create'
 
+    assert_have_selector ".project:contains('Night at Birdland') .project-body.visible"
+
     assert_have_selector ".project:first *:contains('Night at Birdland')"
     assert_have_selector ".project form[action$=night-at-birdland]"
-  end
-
-  scenario "a user can delete projects" do
   end
 end

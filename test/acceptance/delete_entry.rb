@@ -15,6 +15,7 @@ class DeleteEntryTest < Test::Unit::AcceptanceTestCase
     visit '/'
     click_button_within ".project:contains('Native Songs') .entry:first"
 
+    assert_have_selector ".project:contains('Native Songs') .project-body.visible"
     assert_have_selector "h1:contains('time tracker')"
     assert_have_no_selector ".project:contains('Native Songs') .entry"
   end

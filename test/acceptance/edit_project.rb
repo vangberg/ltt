@@ -18,6 +18,7 @@ class EditProjectTest < Test::Unit::AcceptanceTestCase
       click_button 'Change alias!'
     end
 
+    assert_have_selector ".project:contains('My Aim Is True') .project-body.visible"
     assert_have_selector ".project:contains('My Aim Is True') input[value='aim']"
   end
 end
