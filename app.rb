@@ -175,7 +175,7 @@ end
 
 post '/:project/entries' do
   project = find_project(params[:project])
-  project.entries.create(:duration_as_string => params[:duration])
+  project.entries.create(:duration_as_string => params[:duration], :description => params[:description])
   redirect "/#{project.short_url}"
 end
 
@@ -233,8 +233,10 @@ __END__
           = put "/#{project.short_url}" do
             %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}
             %button Change alias!
+          %br
           = post "/#{project.short_url}/entries" do
             %input{:type => 'text', :name => 'duration'}
+            %input{:type => 'text', :name => 'description'}
             %button Add time!
         %span.delete
           = delete "/#{project.short_url}" do

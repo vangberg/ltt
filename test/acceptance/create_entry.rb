@@ -20,4 +20,20 @@ class CreateEntryTest < Test::Unit::AcceptanceTestCase
     assert_have_selector ".project:contains('Psychocandy') .project-body[style='display: block']"
     assert_have_selector ".project:contains('Psychocandy') .entry:first:contains('2h10m')"
   end
+
+  scenario "a user creates a 2 hour and 10 minute entry with description" do
+    login!
+    @user.projects.create(:name => 'Psychocandy')
+
+    visit '/'
+    within ".project:contains('Psychocandy')" do
+      fill_in 'duration', :with => '2h 10m'
+      fill_in 'description', :with => 'Drums'
+      click_button 'Add time!'
+    end
+
+    assert_have_selector ".project:contains('Psychocandy') .project-body[style='display: block']"
+    assert_have_selector ".project:contains('Psychocandy') .entry:first:contains('2h10m')"
+    assert_have_selector ".project:contains('Psychocandy') .entry:first:contains('Drums')"
+  end
 end
