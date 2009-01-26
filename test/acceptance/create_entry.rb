@@ -12,9 +12,9 @@ class CreateEntryTest < Test::Unit::AcceptanceTestCase
     @user.projects.create(:name => 'Psychocandy')
 
     visit '/'
-    within ".project:contains('Psychocandy')" do
+    within ".project:contains('Psychocandy') form:contains('Track time')" do
       fill_in 'duration', :with => '2h 10m'
-      click_button 'Add time!'
+      click_button
     end
 
     assert_have_selector ".project:contains('Psychocandy') .project-body[style='display: block']"
@@ -26,10 +26,10 @@ class CreateEntryTest < Test::Unit::AcceptanceTestCase
     @user.projects.create(:name => 'Psychocandy')
 
     visit '/'
-    within ".project:contains('Psychocandy')" do
+    within ".project:contains('Psychocandy') form:contains('Track time')" do
       fill_in 'duration', :with => '2h 10m'
       fill_in 'description', :with => 'Drums'
-      click_button 'Add time!'
+      click_button
     end
 
     assert_have_selector ".project:contains('Psychocandy') .project-body[style='display: block']"

@@ -202,6 +202,7 @@ __END__
       the lil' time tracker
     %link{:rel => 'stylesheet', :type => 'text/css', :href => '/timetracker.css'}
     %script{:type => 'text/javascript', :src => '/jquery-1.3.min.js'}
+    %script{:type => 'text/javascript', :src => '/jquery-form-hints.js'}
     %script{:type => 'text/javascript', :src => '/timetracker.js'}
   %body
     #content
@@ -231,16 +232,20 @@ __END__
       .project-body{:style => "display: #{project == @project ? 'block' : 'none'}"}
         .controls
           = put "/#{project.short_url}" do
+            Change alias:
             %input{:type => 'text', :value => project.short_url, :name => 'project[short_url]'}
-            %button Change alias!
+            %button Go!
           %br
           = post "/#{project.short_url}/entries" do
-            %input{:type => 'text', :name => 'duration'}
-            %input{:type => 'text', :name => 'description'}
-            %button Add time!
-        %span.delete
-          = delete "/#{project.short_url}" do
-            %input{:type => 'image', :src => '/images/delete.png', :alt => 'Delete'}
+            Track time:
+            %label{:for => "duration_#{project.id}"} 0h 0m
+            %input{:type => 'text', :name => 'duration', :id => "duration_#{project.id}", :size => 6}
+            %label{:for => "description_#{project.id}"} Description
+            %input{:type => 'text', :name => 'description', :id => "description_#{project.id}"}
+            %button Add!
+          .delete
+            = delete "/#{project.short_url}" do
+              %input{:type => 'image', :src => '/images/delete.png', :alt => 'Delete'}
         .entries
           - project.entries.all(:order => [:id.desc]).each do |entry|
             - unless entry == current_user.tracking

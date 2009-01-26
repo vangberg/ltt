@@ -41,10 +41,22 @@ h1
         :padding 10px
       .controls
         :padding-bottom 0px
+        :position relative
         input, button
-          :background-color white
           :border 1px solid #999
           :padding 3px 5px
+        input
+          :background-color white
+        button
+          :background-color #ddd
+          :cursor pointer
+      .delete
+        :position absolute
+        :top 0
+        :right -35px 
+        input
+          :background-color white
+          :border-width 0
       .entries
         .entry
           :display inline

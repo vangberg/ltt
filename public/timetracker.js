@@ -21,4 +21,6 @@ $(function() {
     var description = prompt('Description:');
     $(this).find('[name=description]').val(description);
   })
+
+  $(".controls").hints()
 })
