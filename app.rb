@@ -108,10 +108,10 @@ helpers do
   def delete(path, &block) rest_link(path, :delete, &block) end
 
   def rest_link(path, method, &block)
-    f = "<form action='#{path}' method='post'>"
-    f << "<input type='hidden' name='_method' value='#{method.to_s}' />"
-    f << Haml::Helpers.capture_haml(&block)
-    f << "</form>"
+    "<form action='#{path}' method='post'>" +
+    "<input type='hidden' name='_method' value='#{method.to_s}' />" +
+    Haml::Helpers.capture_haml(&block) +
+    "</form>"
   end
 
   def tracking?(project)
