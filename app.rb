@@ -142,8 +142,9 @@ get '/:project' do
 end
 
 put '/:short_url' do
-  @project = find_project(params[:short_url])
-  @project.update_attributes(params['project'])
+  project = find_project(params[:short_url])
+  project.update_attributes(params['project'])
+  redirect "/#{project.short_url}"
   haml :dashboard
 end
 
